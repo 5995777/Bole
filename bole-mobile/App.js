@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider, DefaultTheme, DarkTheme } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, Text } from 'react-native';
 
 // Import screens
 import AuthNavigator from './src/navigation/AuthNavigator';
@@ -37,7 +37,7 @@ export default function App() {
     <ReduxProvider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer theme={theme}>
-          <Text>App is running!</Text> {/* 添加这行 */}
+          <Text style={{ display: 'none' }}>App is running!</Text>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Auth" component={AuthNavigator} />
             <Stack.Screen name="Main" component={MainNavigator} />
