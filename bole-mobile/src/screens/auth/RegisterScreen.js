@@ -108,23 +108,23 @@ const RegisterScreen = ({ navigation }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.title, { color: theme.colors.primary }]}>Create Account</Text>
-          <Text style={styles.subtitle}>Join Bole Recruitment Platform</Text>
+          <Text style={[styles.title, { color: theme.colors.primary }]}>创建账号</Text>
+          <Text style={styles.subtitle}>加入伯乐招聘平台</Text>
         </View>
 
         <View style={styles.formContainer}>
           <TextInput
-            label="Username"
+            label="用户名"
             value={username}
             onChangeText={setUsername}
             style={styles.input}
             autoCapitalize="none"
             error={!!usernameError}
           />
-          {usernameError ? <HelperText type="error">{usernameError}</HelperText> : null}
+          {usernameError ? <HelperText type="error">{usernameError === 'Username is required' ? '请输入用户名' : '用户名至少需要3个字符'}</HelperText> : null}
 
           <TextInput
-            label="Email"
+            label="邮箱"
             value={email}
             onChangeText={setEmail}
             style={styles.input}
@@ -132,10 +132,10 @@ const RegisterScreen = ({ navigation }) => {
             autoCapitalize="none"
             error={!!emailError}
           />
-          {emailError ? <HelperText type="error">{emailError}</HelperText> : null}
+          {emailError ? <HelperText type="error">{emailError === 'Email is required' ? '请输入邮箱' : '请输入有效的邮箱地址'}</HelperText> : null}
 
           <TextInput
-            label="Password"
+            label="密码"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={secureTextEntry}
@@ -148,10 +148,10 @@ const RegisterScreen = ({ navigation }) => {
             }
             error={!!passwordError}
           />
-          {passwordError ? <HelperText type="error">{passwordError}</HelperText> : null}
+          {passwordError ? <HelperText type="error">{passwordError === 'Password is required' ? '请输入密码' : '密码至少需要6个字符'}</HelperText> : null}
 
           <TextInput
-            label="Confirm Password"
+            label="确认密码"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={confirmSecureTextEntry}
@@ -164,9 +164,9 @@ const RegisterScreen = ({ navigation }) => {
             }
             error={!!confirmPasswordError}
           />
-          {confirmPasswordError ? <HelperText type="error">{confirmPasswordError}</HelperText> : null}
+          {confirmPasswordError ? <HelperText type="error">{confirmPasswordError === 'Please confirm your password' ? '请确认密码' : '两次输入的密码不一致'}</HelperText> : null}
 
-          <Text style={styles.roleLabel}>I am a:</Text>
+          <Text style={styles.roleLabel}>我是：</Text>
           <View style={styles.roleContainer}>
             <View style={styles.roleOption}>
               <RadioButton
@@ -175,7 +175,7 @@ const RegisterScreen = ({ navigation }) => {
                 onPress={() => setRole('JOBSEEKER')}
                 color={theme.colors.primary}
               />
-              <Text onPress={() => setRole('JOBSEEKER')}>Job Seeker</Text>
+              <Text onPress={() => setRole('JOBSEEKER')}>求职者</Text>
             </View>
             <View style={styles.roleOption}>
               <RadioButton
@@ -184,7 +184,7 @@ const RegisterScreen = ({ navigation }) => {
                 onPress={() => setRole('RECRUITER')}
                 color={theme.colors.primary}
               />
-              <Text onPress={() => setRole('RECRUITER')}>Recruiter</Text>
+              <Text onPress={() => setRole('RECRUITER')}>招聘者</Text>
             </View>
           </View>
 
@@ -197,7 +197,7 @@ const RegisterScreen = ({ navigation }) => {
             loading={loading}
             disabled={loading}
           >
-            Register
+            注册
           </Button>
 
           <View style={styles.loginContainer}>

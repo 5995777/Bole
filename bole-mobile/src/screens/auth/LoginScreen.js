@@ -61,22 +61,22 @@ const LoginScreen = ({ navigation }) => {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: theme.colors.primary }]}>Bole Recruitment</Text>
+          <Text style={[styles.title, { color: theme.colors.primary }]}>伯乐招聘</Text>
         </View>
 
         <View style={styles.formContainer}>
           <TextInput
-            label="Username"
+            label="用户名"
             value={username}
             onChangeText={setUsername}
             style={styles.input}
             autoCapitalize="none"
             error={!!usernameError}
           />
-          {usernameError ? <HelperText type="error">{usernameError}</HelperText> : null}
+          {usernameError ? <HelperText type="error">{usernameError === 'Username is required' ? '请输入用户名' : '用户名至少需要3个字符'}</HelperText> : null}
 
           <TextInput
-            label="Password"
+            label="密码"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={secureTextEntry}
@@ -89,7 +89,7 @@ const LoginScreen = ({ navigation }) => {
             }
             error={!!passwordError}
           />
-          {passwordError ? <HelperText type="error">{passwordError}</HelperText> : null}
+          {passwordError ? <HelperText type="error">{passwordError === 'Password is required' ? '请输入密码' : '密码至少需要6个字符'}</HelperText> : null}
 
           {error ? <HelperText type="error">{error}</HelperText> : null}
 
@@ -100,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
             loading={loading}
             disabled={loading}
           >
-            Login
+            登录
           </Button>
 
           <Button
@@ -108,18 +108,18 @@ const LoginScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ForgotPassword')}
             style={styles.textButton}
           >
-            Forgot Password?
+            忘记密码？
           </Button>
 
           <View style={styles.registerContainer}>
-            <Text>Don't have an account? </Text>
+            <Text>还没有账号？</Text>
             <Button
               mode="text"
               onPress={() => navigation.navigate('Register')}
               style={styles.registerButton}
               labelStyle={styles.registerButtonLabel}
             >
-              Register
+              注册
             </Button>
           </View>
         </View>
@@ -178,3 +178,5 @@ const styles = StyleSheet.create({
     marginLeft: 0,
   },
 });
+
+export default LoginScreen;

@@ -5,9 +5,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // 创建API实例
 const API = axios.create({
   // 在Android模拟器中，10.0.2.2指向主机的localhost
-  baseURL: Platform.OS === 'android' 
+  // 在iOS模拟器中，localhost指向主机的localhost
+  // 在真机上，需要使用实际的服务器地址
+  baseURL: Platform.OS === 'android'
     ? 'http://10.0.2.2:8080/api'
-    : 'http://localhost:8080/api',
+    : Platform.OS === 'ios'
+      ? 'http://172.20.10.2:8080/api'
+      : 'http://your-server-ip:8080/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

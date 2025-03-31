@@ -42,6 +42,9 @@ public class User {
 
     private String profilePicture;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     // Relationships
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Resume resume;

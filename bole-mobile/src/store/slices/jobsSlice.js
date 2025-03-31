@@ -1,21 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-// API URL
-const API_URL = 'http://localhost:8080/api/jobs';
+import { jobAPI } from '../../api/apiService';
 
 // Async thunks
 export const fetchJobs = createAsyncThunk(
   'jobs/fetchJobs',
   async (params = {}, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.get(API_URL, {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await jobAPI.getAllJobs(params);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -27,12 +18,7 @@ export const fetchJobById = createAsyncThunk(
   'jobs/fetchJobById',
   async (jobId, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.get(`${API_URL}/${jobId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await jobAPI.getJobById(jobId);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -44,12 +30,7 @@ export const createJob = createAsyncThunk(
   'jobs/createJob',
   async (jobData, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.post(API_URL, jobData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await jobAPI.createJob(jobData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -61,12 +42,7 @@ export const updateJob = createAsyncThunk(
   'jobs/updateJob',
   async ({ jobId, jobData }, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.put(`${API_URL}/${jobId}`, jobData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await jobAPI.updateJob(jobId, jobData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -78,12 +54,7 @@ export const deleteJob = createAsyncThunk(
   'jobs/deleteJob',
   async (jobId, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      await axios.delete(`${API_URL}/${jobId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await jobAPI.deleteJob(jobId);
       return jobId;
     } catch (error) {
       return rejectWithValue(error.response.data);

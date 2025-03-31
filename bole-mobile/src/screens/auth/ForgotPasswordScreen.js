@@ -54,13 +54,13 @@ const ForgotPasswordScreen = ({ navigation }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.title, { color: theme.colors.primary }]}>Forgot Password</Text>
-          <Text style={styles.subtitle}>Enter your email to reset your password</Text>
+          <Text style={[styles.title, { color: theme.colors.primary }]}>忘记密码</Text>
+          <Text style={styles.subtitle}>输入您的邮箱以重置密码</Text>
         </View>
 
         <View style={styles.formContainer}>
           <TextInput
-            label="Email"
+            label="邮箱"
             value={email}
             onChangeText={setEmail}
             style={styles.input}
@@ -68,10 +68,10 @@ const ForgotPasswordScreen = ({ navigation }) => {
             autoCapitalize="none"
             error={!!emailError}
           />
-          {emailError ? <HelperText type="error">{emailError}</HelperText> : null}
+          {emailError ? <HelperText type="error">{emailError === 'Email is required' ? '请输入邮箱' : '请输入有效的邮箱地址'}</HelperText> : null}
 
           {error ? <HelperText type="error">{error}</HelperText> : null}
-          {message ? <HelperText type="info" style={styles.successMessage}>{message}</HelperText> : null}
+          {message ? <HelperText type="info" style={styles.successMessage}>{message === 'Password reset instructions have been sent to your email.' ? '密码重置说明已发送至您的邮箱。' : message}</HelperText> : null}
 
           <Button
             mode="contained"
@@ -80,7 +80,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             loading={loading}
             disabled={loading}
           >
-            Reset Password
+            重置密码
           </Button>
 
           <Button
@@ -88,7 +88,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('Login')}
             style={styles.backButton}
           >
-            Back to Login
+            返回登录
           </Button>
         </View>
       </ScrollView>

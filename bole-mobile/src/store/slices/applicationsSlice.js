@@ -1,21 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-// API URL
-const API_URL = 'http://localhost:8080/api/applications';
+import { applicationAPI } from '../../api/apiService';
 
 // Async thunks
 export const fetchApplications = createAsyncThunk(
   'applications/fetchApplications',
   async (params = {}, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.get(API_URL, {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await applicationAPI.getAllApplications(params);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -27,12 +18,7 @@ export const fetchApplicationById = createAsyncThunk(
   'applications/fetchApplicationById',
   async (applicationId, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.get(`${API_URL}/${applicationId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await applicationAPI.getApplicationById(applicationId);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -44,12 +30,7 @@ export const createApplication = createAsyncThunk(
   'applications/createApplication',
   async ({ jobId, coverLetter }, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.post(API_URL, { jobId, coverLetter }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await applicationAPI.createApplication({ jobId, coverLetter });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -61,12 +42,7 @@ export const updateApplicationStatus = createAsyncThunk(
   'applications/updateApplicationStatus',
   async ({ applicationId, status }, { rejectWithValue, getState }) => {
     try {
-      const { token } = getState().auth;
-      const response = await axios.put(`${API_URL}/${applicationId}/status`, { status }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await applicationAPI.updateApplicationStatus(applicationId, status);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
