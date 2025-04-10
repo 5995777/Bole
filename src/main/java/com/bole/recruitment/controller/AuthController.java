@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,10 +43,18 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+        System.out.println("Login attempt for username: " + loginRequest.getUsername());
+        System.out.println("Login request details: " + loginRequest.toString());
+        
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        System.out.println("Request headers: " + request.getHeaderNames());
+        System.out.println("Request method: " + request.getMethod());
+        
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            System.out.println("Authentication successful for username: " + loginRequest.getUsername());
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(authentication);
         
@@ -53,12 +64,20 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+                
+        System.out.println("Generated JWT token: " + jwt);
+        System.out.println("User roles: " + roles);
 
         return ResponseEntity.ok(new JwtResponse(jwt, 
                                  userDetails.getId(), 
                                  userDetails.getUsername(), 
                                  userDetails.getEmail(),
                                  roles));
+        } catch (Exception e) {
+            System.out.println("Authentication failed for username: " + loginRequest.getUsername() + ", error: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @PostMapping("/register")
@@ -81,6 +100,7 @@ public class AuthController {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
         user.setRole(signUpRequest.getRole());
+        user.setEnabled(true);
 
         userRepository.save(user);
 

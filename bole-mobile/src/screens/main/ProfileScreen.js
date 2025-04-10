@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Card, Title, Paragraph, Button, Avatar, Divider, useTheme } from 'react-native-paper';
+import SafeAreaWrapper from '../../components/SafeAreaWrapper';
 
 const ProfileScreen = ({ navigation }) => {
   const { user } = useSelector((state) => state.auth);
@@ -38,7 +39,8 @@ const ProfileScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaWrapper backgroundColor="#ffffff">
+      <ScrollView style={styles.container}>
       <Card style={styles.card}>
         <Card.Content style={styles.header}>
           <Avatar.Text
@@ -120,7 +122,8 @@ const ProfileScreen = ({ navigation }) => {
       >
         编辑资料
       </Button>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaWrapper>
   );
 };
 

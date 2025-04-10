@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, KeyboardAvoidingView, Platform, ScrollView } f
 import { TextInput, Button, Text, HelperText, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../../store/slices/authSlice';
+import SafeAreaWrapper from '../../components/SafeAreaWrapper';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -12,13 +13,26 @@ const LoginScreen = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState('');
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
   const theme = useTheme();
 
   useEffect(() => {
     // Clear any previous errors
     dispatch(clearError());
   }, [dispatch]);
+
+  // 监听认证状态变化
+  useEffect(() => {
+    console.log('LoginScreen - Authentication state changed:', isAuthenticated);
+    if (isAuthenticated) {
+      console.log('LoginScreen - User authenticated, navigating to Main');
+      // 使用replace而不是navigate，确保不能返回到登录页
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
+    }
+  }, [isAuthenticated, navigation]);
 
   const validateForm = () => {
     let isValid = true;
@@ -50,10 +64,11 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <SafeAreaWrapper backgroundColor="#ffffff">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.logoContainer}>
           <Image
@@ -123,8 +138,9 @@ const LoginScreen = ({ navigation }) => {
             </Button>
           </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaWrapper>
   );
 };
 

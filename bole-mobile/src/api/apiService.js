@@ -11,7 +11,7 @@ const API = axios.create({
     ? 'http://10.0.2.2:8080/api'
     : Platform.OS === 'ios'
       ? 'http://172.20.10.2:8080/api'
-      : 'http://your-server-ip:8080/api',
+      : 'http://192.168.1.100:8080/api', // 请将192.168.1.100替换为你的电脑在局域网中的实际IP地址
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

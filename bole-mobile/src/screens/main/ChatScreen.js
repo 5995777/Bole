@@ -3,6 +3,7 @@ import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Keyboard
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Divider } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
+import SafeAreaWrapper from '../../components/SafeAreaWrapper';
 
 // Import actions
 import { fetchMessages, sendMessage } from '../../store/slices/chatSlice';
@@ -147,32 +148,37 @@ const ChatScreen = ({ route, navigation }) => {
   
   if (loading && conversationMessages.length === 0) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#6200ee" />
-      </View>
+      <SafeAreaWrapper backgroundColor="#ffffff">
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color="#6200ee" />
+        </View>
+      </SafeAreaWrapper>
     );
   }
   
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>Error: {error}</Text>
-        <TouchableOpacity 
-          style={styles.retryButton}
-          onPress={() => dispatch(fetchMessages(conversationId))}
-        >
-          <Text style={styles.retryText}>Retry</Text>
-        </TouchableOpacity>
-      </View>
+      <SafeAreaWrapper backgroundColor="#ffffff">
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>Error: {error}</Text>
+          <TouchableOpacity 
+            style={styles.retryButton}
+            onPress={() => dispatch(fetchMessages(conversationId))}
+          >
+            <Text style={styles.retryText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaWrapper>
     );
   }
   
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-    >
+    <SafeAreaWrapper backgroundColor="#ffffff">
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
       <FlatList
         ref={flatListRef}
         data={conversationMessages}
@@ -205,7 +211,8 @@ const ChatScreen = ({ route, navigation }) => {
           )}
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaWrapper>
   );
 };
 

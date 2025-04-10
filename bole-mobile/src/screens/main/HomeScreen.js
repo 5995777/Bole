@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
+import SafeAreaWrapper from '../../components/SafeAreaWrapper';
 
 // Import actions
 import { fetchJobs } from '../../store/slices/jobsSlice';
@@ -26,16 +27,16 @@ const HomeScreen = ({ navigation }) => {
     
     // Set up navigation options
     navigation.setOptions({
-      headerTitle: 'Home',
+      headerTitle: '首页',
     });
   }, [dispatch, navigation]);
   
   const renderRecentJobs = () => {
-    if (jobs.length === 0) {
+    if (!jobs || jobs.length === 0) {
       return (
         <Card style={styles.emptyCard}>
           <Card.Content>
-            <Paragraph>No recent jobs found</Paragraph>
+            <Paragraph>暂无最近职位</Paragraph>
           </Card.Content>
         </Card>
       );
@@ -60,11 +61,11 @@ const HomeScreen = ({ navigation }) => {
   };
   
   const renderRecentApplications = () => {
-    if (applications.length === 0) {
+    if (!applications || applications.length === 0) {
       return (
         <Card style={styles.emptyCard}>
           <Card.Content>
-            <Paragraph>No recent applications found</Paragraph>
+            <Paragraph>暂无最近申请</Paragraph>
           </Card.Content>
         </Card>
       );
@@ -89,11 +90,11 @@ const HomeScreen = ({ navigation }) => {
   };
   
   const renderRecentMessages = () => {
-    if (conversations.length === 0) {
+    if (!conversations || conversations.length === 0) {
       return (
         <Card style={styles.emptyCard}>
           <Card.Content>
-            <Paragraph>No recent messages</Paragraph>
+            <Paragraph>暂无最近消息</Paragraph>
           </Card.Content>
         </Card>
       );
@@ -122,16 +123,17 @@ const HomeScreen = ({ navigation }) => {
   };
   
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaWrapper backgroundColor="#ffffff">
+      <ScrollView style={styles.container}>
       <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Welcome, {user?.name}!</Text>
+        <Text style={styles.welcomeText}>欢迎 {user?.name}!</Text>
       </View>
       
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Jobs</Text>
+          <Text style={styles.sectionTitle}>最近职位</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Jobs')}>
-            <Text style={styles.seeAllText}>See All</Text>
+            <Text style={styles.seeAllText}>查看全部</Text>
           </TouchableOpacity>
         </View>
         {renderRecentJobs()}
@@ -141,16 +143,16 @@ const HomeScreen = ({ navigation }) => {
             style={styles.actionButton}
             onPress={() => navigation.navigate('Jobs', { screen: 'CreateJob' })}
           >
-            Post New Job
+            发布新职位
           </Button>
         )}
       </View>
       
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Applications</Text>
+          <Text style={styles.sectionTitle}>最近申请</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Applications')}>
-            <Text style={styles.seeAllText}>See All</Text>
+            <Text style={styles.seeAllText}>查看全部</Text>
           </TouchableOpacity>
         </View>
         {renderRecentApplications()}
@@ -158,9 +160,9 @@ const HomeScreen = ({ navigation }) => {
       
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Messages</Text>
+          <Text style={styles.sectionTitle}>最近消息</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-            <Text style={styles.seeAllText}>See All</Text>
+            <Text style={styles.seeAllText}>查看全部</Text>
           </TouchableOpacity>
         </View>
         {renderRecentMessages()}
@@ -169,31 +171,43 @@ const HomeScreen = ({ navigation }) => {
           style={styles.actionButton}
           onPress={() => navigation.navigate('Chat', { screen: 'NewConversation' })}
         >
-          Start New Conversation
+          开始新对话
         </Button>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fafafa',
   },
   welcomeContainer: {
-    backgroundColor: '#6200ee',
-    padding: 20,
-    marginBottom: 10,
+    backgroundColor: '#1a237e',
+    padding: 24,
+    marginBottom: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
   },
   welcomeText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#fff',
+    fontFamily: 'PingFang SC',
   },
   section: {
-    marginBottom: 20,
-    padding: 10,
+    marginBottom: 24,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    elevation: 2,
+    marginHorizontal: 16,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -203,22 +217,30 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    color: '#212121',
+    fontFamily: 'PingFang SC',
   },
   seeAllText: {
-    color: '#6200ee',
-    fontWeight: 'bold',
+    color: '#1a237e',
+    fontWeight: '600',
+    fontFamily: 'PingFang SC',
   },
   card: {
-    marginBottom: 10,
+    marginBottom: 12,
+    borderRadius: 8,
+    elevation: 1,
+    backgroundColor: '#fff',
   },
   emptyCard: {
-    marginBottom: 10,
-    backgroundColor: '#f0f0f0',
+    marginBottom: 12,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
   },
   actionButton: {
-    marginTop: 10,
-    backgroundColor: '#6200ee',
+    marginTop: 12,
+    backgroundColor: '#1a237e',
+    borderRadius: 8,
   },
 });
 

@@ -94,13 +94,13 @@ const MainNavigator = () => {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
+            iconName = focused ? 'home' : 'home';
           } else if (route.name === 'Jobs') {
             iconName = focused ? 'work' : 'work-outline';
           } else if (route.name === 'Applications') {
-            iconName = focused ? 'description' : 'description-outline';
+            iconName = focused ? 'description' : 'description';
           } else if (route.name === 'Chat') {
-            iconName = focused ? 'chat' : 'chat-outline';
+            iconName = focused ? 'chat' : 'chat';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
           }
@@ -112,11 +112,41 @@ const MainNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Jobs" component={JobsNavigator} />
-      <Tab.Screen name="Applications" component={ApplicationsNavigator} />
-      <Tab.Screen name="Chat" component={ChatNavigator} />
-      <Tab.Screen name="Profile" component={ProfileNavigator} />
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{ tabBarLabel: '首页', tabBarIcon: ({ color, size }) => (
+          <MaterialIcons name="home" size={size} color={color} />
+        ) }} 
+      />
+      <Tab.Screen 
+        name="Jobs" 
+        component={JobsNavigator} 
+        options={{ tabBarLabel: '职位', tabBarIcon: ({ color, size }) => (
+          <MaterialIcons name="work" size={size} color={color} />
+        ) }} 
+      />
+      <Tab.Screen 
+        name="Applications" 
+        component={ApplicationsNavigator} 
+        options={{ tabBarLabel: '申请', tabBarIcon: ({ color, size }) => (
+          <MaterialIcons name="description" size={size} color={color} />
+        ) }} 
+      />
+      <Tab.Screen 
+        name="Chat" 
+        component={ChatNavigator} 
+        options={{ tabBarLabel: '聊天', tabBarIcon: ({ color, size }) => (
+          <MaterialIcons name="chat" size={size} color={color} />
+        ) }} 
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileNavigator} 
+        options={{ tabBarLabel: '我的', tabBarIcon: ({ color, size }) => (
+          <MaterialIcons name="person" size={size} color={color} />
+        ) }} 
+      />
     </Tab.Navigator>
   );
 };

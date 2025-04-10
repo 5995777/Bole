@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Card, Title, Paragraph, Button, FAB, useTheme } from 'react-native-paper';
+import SafeAreaWrapper from '../../components/SafeAreaWrapper';
 
 const JobsScreen = ({ navigation }) => {
   const [jobs, setJobs] = useState([]);
@@ -49,8 +50,9 @@ const JobsScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
+    <SafeAreaWrapper backgroundColor="#ffffff">
+      <View style={styles.container}>
+        <FlatList
         data={jobs}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
@@ -63,7 +65,8 @@ const JobsScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('CreateJob')}
         />
       )}
-    </View>
+      </View>
+    </SafeAreaWrapper>
   );
 };
 
@@ -72,11 +75,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+
   list: {
     padding: 16,
   },
   card: {
     marginBottom: 16,
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    overflow: 'hidden',
   },
   company: {
     marginTop: 4,
@@ -93,9 +104,14 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    margin: 16,
+    margin: 24,
     right: 0,
     bottom: 0,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
 });
 
