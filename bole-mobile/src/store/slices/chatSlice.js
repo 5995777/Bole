@@ -196,7 +196,7 @@ const chatSlice = createSlice({
       })
       .addCase(fetchConversations.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to fetch conversations';
+        state.error = action.payload?.message || 'Failed to fetch conversations';
       })
       // Fetch Messages
       .addCase(fetchMessages.pending, (state) => {
@@ -209,7 +209,7 @@ const chatSlice = createSlice({
       })
       .addCase(fetchMessages.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to fetch messages';
+        state.error = action.payload?.message || 'Failed to fetch messages';
       })
       // Send Message
       .addCase(sendMessage.pending, (state) => {
@@ -250,7 +250,7 @@ const chatSlice = createSlice({
         }
       })
       .addCase(sendMessage.rejected, (state, action) => {
-        state.error = action.payload ? action.payload.message : 'Failed to send message';
+        state.error = action.payload?.message || 'Failed to send message';
       })
       // Create Conversation
       .addCase(createConversation.pending, (state) => {
@@ -265,7 +265,7 @@ const chatSlice = createSlice({
       })
       .addCase(createConversation.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to create conversation';
+        state.error = action.payload?.message || 'Failed to create conversation';
       });
   },
 });

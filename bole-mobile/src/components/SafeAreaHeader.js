@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Platform, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import globalStyles from '../styles/globalStyles';
 
 /**
  * 安全区域头部组件
@@ -20,9 +21,9 @@ const SafeAreaHeader = ({ backgroundColor = '#ffffff', height = 0 }) => {
   // 计算总高度（安全区域高度 + 额外高度）
   const totalHeight = safeAreaHeight + height;
   
-  return (
-    <View style={[styles.safeArea, { height: totalHeight, backgroundColor }]} />
-  );
+    return (
+        <View style={[styles.safeArea, { height: totalHeight, backgroundColor: backgroundColor || globalStyles.backgroundColor }]} />
+    );
 };
 
 const styles = StyleSheet.create({

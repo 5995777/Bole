@@ -10,11 +10,9 @@ const store = configureStore({
     jobs: jobsReducer,
     applications: applicationsReducer,
     chat: chatReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  }
 });
+
+
 
 export default store;

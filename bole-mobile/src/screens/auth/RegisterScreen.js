@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { TextInput, Button, Text, HelperText, RadioButton, useTheme } from 'react-native-paper';
+import { TextInput, Button, Text, HelperText, RadioButton } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import globalStyles from '../../styles/globalStyles';
 import { register, clearError } from '../../store/slices/authSlice';
 import { User } from '../../models/User';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('123456');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('JOBSEEKER');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -22,7 +23,6 @@ const RegisterScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
-  const theme = useTheme();
 
   useEffect(() => {
     // Clear any previous errors
@@ -107,12 +107,12 @@ const RegisterScreen = ({ navigation }) => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.headerContainer}>
-          <Text style={[styles.title, { color: theme.colors.primary }]}>创建账号</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>创建账号</Text>
           <Text style={styles.subtitle}>加入伯乐招聘平台</Text>
         </View>
 
-        <View style={styles.formContainer}>
+        <View style={styles.form}>
           <TextInput
             label="用户名"
             value={username}
@@ -121,18 +121,18 @@ const RegisterScreen = ({ navigation }) => {
             autoCapitalize="none"
             error={!!usernameError}
           />
-          {usernameError ? <HelperText type="error">{usernameError === 'Username is required' ? '请输入用户名' : '用户名至少需要3个字符'}</HelperText> : null}
+          {usernameError ? <Text style={styles.errorText}>{usernameError === 'Username is required' ? '请输入用户名' : '用户名至少需要3个字符'}</Text> : null}
 
           <TextInput
             label="邮箱"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => setEmail(text.toLowerCase())} // Convert email to lowercase
             style={styles.input}
             keyboardType="email-address"
             autoCapitalize="none"
             error={!!emailError}
           />
-          {emailError ? <HelperText type="error">{emailError === 'Email is required' ? '请输入邮箱' : '请输入有效的邮箱地址'}</HelperText> : null}
+          {emailError ? <Text style={styles.errorText}>{emailError === 'Email is required' ? '请输入邮箱' : '请输入有效的邮箱地址'}</Text> : null}
 
           <TextInput
             label="密码"
@@ -148,7 +148,7 @@ const RegisterScreen = ({ navigation }) => {
             }
             error={!!passwordError}
           />
-          {passwordError ? <HelperText type="error">{passwordError === 'Password is required' ? '请输入密码' : '密码至少需要6个字符'}</HelperText> : null}
+          {passwordError ? <Text style={styles.errorText}>{passwordError === 'Password is required' ? '请输入密码' : '密码至少需要6个字符'}</Text> : null}
 
           <TextInput
             label="确认密码"
@@ -164,52 +164,44 @@ const RegisterScreen = ({ navigation }) => {
             }
             error={!!confirmPasswordError}
           />
-          {confirmPasswordError ? <HelperText type="error">{confirmPasswordError === 'Please confirm your password' ? '请确认密码' : '两次输入的密码不一致'}</HelperText> : null}
+          {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError === 'Please confirm your password' ? '请确认密码' : '两次输入的密码不一致'}</Text> : null}
 
-          <Text style={styles.roleLabel}>我是：</Text>
-          <View style={styles.roleContainer}>
-            <View style={styles.roleOption}>
-              <RadioButton
-                value="JOBSEEKER"
-                status={role === 'JOBSEEKER' ? 'checked' : 'unchecked'}
+          <View style={styles.roleSelection}>
+            <Text style={styles.roleLabel}>注册为：</Text>
+            <View style={styles.roleOptions}>
+              <TouchableOpacity
+                style={[styles.roleOption, role === 'JOBSEEKER' && styles.selectedRole]}
                 onPress={() => setRole('JOBSEEKER')}
-                color={theme.colors.primary}
-              />
-              <Text onPress={() => setRole('JOBSEEKER')}>求职者</Text>
-            </View>
-            <View style={styles.roleOption}>
-              <RadioButton
-                value="RECRUITER"
-                status={role === 'RECRUITER' ? 'checked' : 'unchecked'}
+              >
+                <Text style={[styles.roleText, role === 'JOBSEEKER' && styles.selectedRoleText]}>求职者</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.roleOption, role === 'RECRUITER' && styles.selectedRole]}
                 onPress={() => setRole('RECRUITER')}
-                color={theme.colors.primary}
-              />
-              <Text onPress={() => setRole('RECRUITER')}>招聘者</Text>
+              >
+                <Text style={[styles.roleText, role === 'RECRUITER' && styles.selectedRoleText]}>招聘者</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
-          {error ? <HelperText type="error">{error}</HelperText> : null}
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-          <Button
-            mode="contained"
-            onPress={handleRegister}
-            style={styles.button}
-            loading={loading}
-            disabled={loading}
-          >
-            注册
-          </Button>
-
-          <View style={styles.loginContainer}>
-            <Text>Already have an account? </Text>
+          <View style={styles.buttonContainer}>
             <Button
-              mode="text"
-              onPress={() => navigation.navigate('Login')}
-              style={styles.loginButton}
-              labelStyle={styles.loginButtonLabel}
+              mode="contained"
+              onPress={handleRegister}
+              loading={loading}
+              disabled={loading}
             >
-              Login
+              注册
             </Button>
+          </View>
+
+          <View style={styles.loginLinkContainer}>
+            <Text style={styles.loginText}>已经有账号了？</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.loginLink}>登录</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -217,65 +209,52 @@ const RegisterScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+const styles = StyleSheet.create({ // Apply global container style
   scrollContainer: {
     flexGrow: 1,
-    padding: 20,
-  },
-  headerContainer: {
-    alignItems: 'center',
-    marginBottom: 30,
-    marginTop: 40,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-  },
-  formContainer: {
-    width: '100%',
+    justifyContent: 'center',
+    padding: 20,\n    paddingVertical: 50,\n  },\n  titleContainer: {\n    alignItems: 'center',\n    marginBottom: 30,\n  },\n  title: {\n    ...globalStyles.headerTitle,\n    fontSize: 32,\n    marginBottom: 10,\n  },\n  subtitle: {\n    ...globalStyles.subtitle,\n    fontSize: 18,\n    color: globalStyles.lightTextColor,\n  },\n  form: {\n    width: '100%',\n    ...globalStyles.cardContainer,\n    paddingTop: 30,\n    paddingBottom: 30,\n  },\n  roleSelection: {\n    marginBottom: 20,\n  },\n  roleLabel: {\n    ...globalStyles.text,\n    fontSize: 16,\n    marginBottom: 10,\n  },\n  roleOptions: {\n    flexDirection: 'row',\n    justifyContent: 'space-around',\n  },\n  roleOption: {\n    flexDirection: 'row',\n    alignItems: 'center',\n    backgroundColor: globalStyles.secondaryBackgroundColor,\n    paddingVertical: 12,\n    paddingHorizontal: 20,\n    borderRadius: 25,\n    borderWidth: 1,\n    borderColor: 'transparent', // Use transparent border by default\n  },\n  roleText: {\n    ...globalStyles.text,\n    fontSize: 16,\n  },\n  selectedRole: {\n    backgroundColor: globalStyles.primaryColor,\n  },\n  selectedRoleText: {\n    color: globalStyles.white,\n  },\n  buttonContainer: {\n    marginTop: 20,\n  },\n  loginLinkContainer: {\n    flexDirection: 'row',\n    alignItems: 'center',\n    justifyContent: 'center',\n    marginTop: 30,\n  },\n  loginText: {\n    ...globalStyles.smallText,\n    marginRight: 5,\n  },\n  loginLink: {\n    ...globalStyles.linkText,\n  },\n  errorText: {\n    ...globalStyles.errorText,\n    marginBottom: 10,\n    textAlign: 'center',\n  },\n  container: {\n    ...globalStyles.container,\n    backgroundColor: globalStyles.white,\n    padding: 0,\n  },\n  input: {\n    ...globalStyles.input,\n    marginBottom: 20,\n  },\n  button: {\n    ...globalStyles.button,\n  },\n  bottomTextContainer: {\n    flexDirection: 'row',\n    alignItems: 'center',\n    justifyContent: 'center',\n    marginTop: 20,\n  },\n  registerButtonText: {\n    ...globalStyles.linkText,\n  },\n  headerContainer: {\n    alignItems: 'center',\n    marginBottom: 20,\n  },\n  formContainer: {\n    width: '100%',\n  },\n  roleContainer: {\n    flexDirection: 'row',\n    justifyContent: 'space-around',\n    marginBottom: 20, // Increased margin\n  },\n  button: {\n    ...globalStyles.button,\n    marginTop: 10,\n    marginBottom: 15,\n  },\n  bottomTextContainer: {\n    flexDirection: 'row',\n    alignItems: 'center',\n    justifyContent: 'center',\n    marginTop: 20, // Increased margin\n  },\n});\n
   },
   input: {
-    marginBottom: 10,
+    ...globalStyles.input,
+    marginBottom: 15,
+    fontSize: 16,
   },
   roleLabel: {
-    marginTop: 10,
+    ...globalStyles.text,
+    fontSize: 18,
     marginBottom: 10,
-    fontSize: 16,
   },
   roleContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    justifyContent: 'space-around',
+    marginBottom: 20, // Increased margin
   },
   roleOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 20,
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: globalStyles.borderColor,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   button: {
-    marginTop: 20,
-    paddingVertical: 8,
+    ...globalStyles.button,
+    marginTop: 10,
+    marginBottom: 15,
   },
-  loginContainer: {
+  bottomTextContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-  },
-  loginButton: {
-    marginLeft: 0,
-    paddingLeft: 0,
-  },
-  loginButtonLabel: {
-    marginLeft: 0,
+    marginTop: 20, // Increased margin
   },
 });
 

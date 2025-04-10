@@ -5,6 +5,7 @@ import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import SafeAreaWrapper from '../../components/SafeAreaWrapper';
 
+import globalStyles from '../../styles/globalStyles';
 // Import actions
 import { fetchJobs } from '../../store/slices/jobsSlice';
 import { fetchApplications } from '../../store/slices/applicationsSlice';
@@ -53,9 +54,9 @@ const HomeScreen = ({ navigation }) => {
       >
         <Card.Content>
           <Title>{job.title}</Title>
-          <Paragraph>{job.company.name}</Paragraph>
-          <Paragraph>{job.location}</Paragraph>
-        </Card.Content>
+              <Text style={globalStyles.text}>{job.company.name}</Text>
+              <Text style={globalStyles.smallText}>{job.location}</Text>
+            </Card.Content>
       </Card>
     ));
   };
@@ -82,9 +83,9 @@ const HomeScreen = ({ navigation }) => {
       >
         <Card.Content>
           <Title>{application.job.title}</Title>
-          <Paragraph>Status: {application.status}</Paragraph>
-          <Paragraph>Applied on: {new Date(application.createdAt).toLocaleDateString()}</Paragraph>
-        </Card.Content>
+              <Text style={globalStyles.text}>Status: {application.status}</Text>
+              <Text style={globalStyles.smallText}>Applied on: {new Date(application.createdAt).toLocaleDateString()}</Text>
+            </Card.Content>
       </Card>
     ));
   };
@@ -103,111 +104,98 @@ const HomeScreen = ({ navigation }) => {
     return conversations.slice(0, 3).map((conversation) => {
       const otherParticipant = conversation.participants.find(p => p.id !== user.userId);
       return (
-        <Card 
-          key={conversation.id} 
-          style={styles.card}
-          onPress={() => navigation.navigate('Chat', { 
-            screen: 'Chat', 
-            params: { conversationId: conversation.id } 
-          })}
-        >
-          <Card.Content>
-            <Title>{otherParticipant.name}</Title>
-            <Paragraph numberOfLines={1}>
-              {conversation.lastMessage ? conversation.lastMessage.content : 'No messages yet'}
-            </Paragraph>
-          </Card.Content>
-        </Card>
+          <Card
+              key={conversation.id}
+              style={styles.card}
+              onPress={() => navigation.navigate('Chat', {
+                screen: 'Chat',
+                params: { conversationId: conversation.id }
+              })}
+          >
+            <Card.Content>
+              <Text style={globalStyles.text}>{otherParticipant.name}</Text>
+              <Text style={globalStyles.text} numberOfLines={1}>
+                {conversation.lastMessage ? conversation.lastMessage.content : 'No messages yet'}
+              </Text>
+            </Card.Content>
+          </Card>
       );
     });
   };
   
   return (
     <SafeAreaWrapper backgroundColor="#ffffff">
-      <ScrollView style={styles.container}>
-      <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>欢迎 {user?.name}!</Text>
-      </View>
-      
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>最近职位</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Jobs')}>
-            <Text style={styles.seeAllText}>查看全部</Text>
-          </TouchableOpacity>
-        </View>
-        {renderRecentJobs()}
-        {isRecruiter && (
-          <Button 
-            mode="contained" 
-            style={styles.actionButton}
-            onPress={() => navigation.navigate('Jobs', { screen: 'CreateJob' })}
-          >
-            发布新职位
-          </Button>
-        )}
-      </View>
-      
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>最近申请</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Applications')}>
-            <Text style={styles.seeAllText}>查看全部</Text>
-          </TouchableOpacity>
-        </View>
-        {renderRecentApplications()}
-      </View>
-      
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>最近消息</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-            <Text style={styles.seeAllText}>查看全部</Text>
-          </TouchableOpacity>
-        </View>
-        {renderRecentMessages()}
-        <Button 
-          mode="contained" 
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('Chat', { screen: 'NewConversation' })}
-        >
-          开始新对话
-        </Button>
-      </View>
-      </ScrollView>
+        <ScrollView style={[globalStyles.container]}>
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.welcomeText}>欢迎 {user?.name}!</Text>
+            </View>
+
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={globalStyles.title}>最近职位</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Jobs')}>
+                <Text style={globalStyles.linkText}>查看全部</Text>
+              </TouchableOpacity>
+            </View>
+            {renderRecentJobs()}
+            {isRecruiter && (
+                <Button mode="contained" style={globalStyles.secondaryButton}
+                        onPress={() => navigation.navigate('Jobs', { screen: 'CreateJob' })}>
+                  发布新职位
+                </Button>
+            )}
+          </View>
+
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={globalStyles.title}>最近申请</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Applications')}>
+                <Text style={globalStyles.linkText}>查看全部</Text>
+              </TouchableOpacity>
+            </View>
+            {renderRecentApplications()}
+          </View>
+
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={globalStyles.title}>最近消息</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+                <Text style={globalStyles.linkText}>查看全部</Text>
+              </TouchableOpacity>
+            </View>
+            {renderRecentMessages()}
+            <Button mode="contained" style={globalStyles.secondaryButton}
+                    onPress={() => navigation.navigate('Chat', { screen: 'NewConversation' })}>
+              开始新对话
+            </Button>
+          </View>
+        </ScrollView>
     </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: globalStyles.backgroundColor,
   },
+
   welcomeContainer: {
-    backgroundColor: '#1a237e',
-    padding: 24,
-    marginBottom: 16,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+      backgroundColor: globalStyles.primaryColor,
+      padding: 20,
+      borderRadius: 10,
+      margin: 15,
+      alignItems: 'center',
+      ...globalStyles.shadow,
   },
   welcomeText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#fff',
-    fontFamily: 'PingFang SC',
+      fontSize: 22,
+      color: globalStyles.white,
+      fontWeight: 'bold',
   },
+
   section: {
-    marginBottom: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    elevation: 2,
-    marginHorizontal: 16,
+      ...globalStyles.cardContainer,
+      marginBottom: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -215,33 +203,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#212121',
-    fontFamily: 'PingFang SC',
-  },
-  seeAllText: {
-    color: '#1a237e',
-    fontWeight: '600',
-    fontFamily: 'PingFang SC',
-  },
-  card: {
-    marginBottom: 12,
-    borderRadius: 8,
-    elevation: 1,
-    backgroundColor: '#fff',
-  },
+
+    card: {
+        ...globalStyles.card,
+        marginBottom: 15,
+    },
+
   emptyCard: {
-    marginBottom: 12,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
+      ...globalStyles.cardContainer,
+      backgroundColor: globalStyles.backgroundColor,
+      padding: 15,
+      alignItems: 'center',
   },
-  actionButton: {
-    marginTop: 12,
-    backgroundColor: '#1a237e',
-    borderRadius: 8,
-  },
+
+    emptyText: {
+        ...globalStyles.text,
+        color: globalStyles.lightTextColor,
+    }
 });
 
 export default HomeScreen;

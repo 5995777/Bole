@@ -85,7 +85,7 @@ const applicationsSlice = createSlice({
       })
       .addCase(fetchApplications.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to fetch applications';
+        state.error = action.payload?.message || 'Failed to fetch applications';
       })
       // Fetch Application By Id
       .addCase(fetchApplicationById.pending, (state) => {
@@ -98,7 +98,7 @@ const applicationsSlice = createSlice({
       })
       .addCase(fetchApplicationById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to fetch application';
+        state.error = action.payload?.message || 'Failed to fetch application';
       })
       // Create Application
       .addCase(createApplication.pending, (state) => {
@@ -111,7 +111,7 @@ const applicationsSlice = createSlice({
       })
       .addCase(createApplication.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to create application';
+        state.error = action.payload?.message || 'Failed to create application';
       })
       // Update Application Status
       .addCase(updateApplicationStatus.pending, (state) => {
@@ -128,7 +128,7 @@ const applicationsSlice = createSlice({
       })
       .addCase(updateApplicationStatus.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to update application status';
+        state.error = action.payload?.message || 'Failed to update application status';
       });
   },
 });

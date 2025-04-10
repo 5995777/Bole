@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Keyboard
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Divider } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
-import SafeAreaWrapper from '../../components/SafeAreaWrapper';
+import globalStyles from '../../styles/globalStyles';
 
 // Import actions
 import { fetchMessages, sendMessage } from '../../store/slices/chatSlice';
@@ -148,12 +148,12 @@ const ChatScreen = ({ route, navigation }) => {
   
   if (loading && conversationMessages.length === 0) {
     return (
-      <SafeAreaWrapper backgroundColor="#ffffff">
+      <View style={[globalStyles.container, styles.centered]}>
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color="#6200ee" />
+          <ActivityIndicator size="large" color={globalStyles.primaryColor} />
         </View>
-      </SafeAreaWrapper>
-    );
+      </View>
+      );
   }
   
   if (error) {
@@ -161,11 +161,8 @@ const ChatScreen = ({ route, navigation }) => {
       <SafeAreaWrapper backgroundColor="#ffffff">
         <View style={styles.centered}>
           <Text style={styles.errorText}>Error: {error}</Text>
-          <TouchableOpacity 
-            style={styles.retryButton}
-            onPress={() => dispatch(fetchMessages(conversationId))}
-          >
-            <Text style={styles.retryText}>Retry</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={() => dispatch(fetchMessages(conversationId))}>
+            <Text style={styles.retryText}>重试</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaWrapper>
@@ -173,12 +170,11 @@ const ChatScreen = ({ route, navigation }) => {
   }
   
   return (
-    <SafeAreaWrapper backgroundColor="#ffffff">
+    <View style={globalStyles.container}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-      >
       <FlatList
         ref={flatListRef}
         data={conversationMessages}
@@ -210,20 +206,21 @@ const ChatScreen = ({ route, navigation }) => {
             <MaterialIcons name="send" size={24} color="#fff" />
           )}
         </TouchableOpacity>
-      </View>
       </KeyboardAvoidingView>
-    </SafeAreaWrapper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: globalStyles.backgroundColor,
+    padding: 10,
   },
   messagesList: {
     paddingHorizontal: 10,
     paddingBottom: 10,
+    marginTop: 10,
   },
   messageContainer: {
     flexDirection: 'row',
@@ -231,103 +228,123 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   ownMessageContainer: {
-    alignSelf: 'flex-end',
-    marginLeft: 'auto',
+    alignSelf: 'flex-end', // Align to the right
+    marginLeft: 50, // Push further to the right
   },
   otherMessageContainer: {
-    alignSelf: 'flex-start',
-    marginRight: 'auto',
+    alignSelf: 'flex-start', // Align to the left
+    marginRight: 50, // Push further to the left
   },
   avatar: {
-    marginRight: 5,
-    alignSelf: 'flex-end',
+    marginRight: 8,
+    alignSelf: 'flex-end', // Align with the end of the message
   },
   messageBubble: {
-    padding: 10,
-    borderRadius: 15,
-    maxWidth: '100%',
+    padding: 12,
+    borderRadius: 20,
+    maxWidth: '100%', // Take up full width
+    ...globalStyles.shadow, // Apply shadow for depth
   },
   ownMessageBubble: {
-    backgroundColor: '#6200ee',
-    borderBottomRightRadius: 5,
+    backgroundColor: globalStyles.primaryColor,
+    borderBottomRightRadius: 0, // Remove sharp corner
   },
   otherMessageBubble: {
-    backgroundColor: '#fff',
-    borderBottomLeftRadius: 5,
+    backgroundColor: globalStyles.white,
+    borderBottomLeftRadius: 0, // Remove sharp corner
   },
   messageText: {
     fontSize: 16,
-    color: '#000',
+    color: globalStyles.textColor,
+    fontFamily: 'PingFang SC', // Consistent font
   },
-  ownMessageText: {
-    color: '#fff',
+  ownMessageText: { // Text color for own messages
+    color: globalStyles.white,
   },
   messageTime: {
     fontSize: 10,
-    color: '#888',
+    color: globalStyles.secondaryTextColor,
     alignSelf: 'flex-end',
-    marginTop: 5,
+    marginTop: 8,
   },
   messageStatus: {
-    fontSize: 10,
-    color: '#ccc',
+    fontSize: 12,
+    color: globalStyles.tertiaryTextColor,
+    marginLeft: 5,
   },
   dayContainer: {
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: 15,
   },
   dayText: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    color: '#666',
-    fontSize: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 10,
+    backgroundColor: globalStyles.tertiaryBackgroundColor,
+    color: globalStyles.secondaryTextColor,
+    fontSize: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
   },
   inputContainer: {
     flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#fff',
+    padding: 15,
+    backgroundColor: globalStyles.white,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: globalStyles.borderColor,
     alignItems: 'center',
   },
   input: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    maxHeight: 100,
+    backgroundColor: globalStyles.secondaryBackgroundColor,
+    borderRadius: 25,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    maxHeight: 120,
+    fontSize: 16,
+    fontFamily: 'PingFang SC',
+    color: globalStyles.textColor,
   },
   sendButton: {
-    backgroundColor: '#6200ee',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    backgroundColor: globalStyles.primaryColor,
+    width: 45,
+    height: 45,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,
+    marginLeft: 12,
+    ...globalStyles.shadow,
   },
   disabledSendButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: globalStyles.disabledColor,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
+    errorContainer: {
+        backgroundColor: globalStyles.errorBackground,
+        padding: 15,
+        borderRadius: 8,
+        marginBottom: 20,
+        alignItems: 'center',
+    },
+    errorText: {
+        color: globalStyles.errorText,
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    loadingContainer: {
+        ...globalStyles.cardContainer,
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
   },
   retryButton: {
-    backgroundColor: '#6200ee',
-    padding: 10,
-    borderRadius: 5,
+    ...globalStyles.button,
+    marginTop: 15,
   },
   retryText: {
-    color: '#fff',
+    color: globalStyles.buttonText,
   },
 });
 

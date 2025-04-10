@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Card, Title, Paragraph, Button, FAB, useTheme } from 'react-native-paper';
-import SafeAreaWrapper from '../../components/SafeAreaWrapper';
+import globalStyles from '../../styles/globalStyles';
 
 const JobsScreen = ({ navigation }) => {
   const [jobs, setJobs] = useState([]);
@@ -47,10 +47,12 @@ const JobsScreen = ({ navigation }) => {
         </Paragraph>
       </Card.Content>
     </Card>
-  );
+    );
 
-  return (
-    <SafeAreaWrapper backgroundColor="#ffffff">
+    return (
+      <View style={globalStyles.container}>
+          <FlatList
+              data={jobs}
       <View style={styles.container}>
         <FlatList
         data={jobs}
@@ -58,27 +60,32 @@ const JobsScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.list}
       />
-      {isRecruiter && (
-        <FAB
-          style={[styles.fab, { backgroundColor: theme.colors.primary }]}
-          icon="plus"
-          onPress={() => navigation.navigate('CreateJob')}
-        />
-      )}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.list}
+          />
+          {isRecruiter && (
+              <FAB
+                  style={styles.fab}
+                  icon="plus"
+                  color="white"
+                  onPress={() => navigation.navigate('CreateJob')}
+              />
+          )}
       </View>
-    </SafeAreaWrapper>
-  );
+      );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
+    list: {
+        padding: 16,
+    },
+    card: {
+        ...globalStyles.card,
+        marginBottom: 15,
+    },
 
-  list: {
-    padding: 16,
-  },
+
   card: {
     marginBottom: 16,
     borderRadius: 12,
@@ -89,30 +96,23 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     overflow: 'hidden',
   },
-  company: {
-    marginTop: 4,
-    color: '#666',
-  },
-  details: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  description: {
-    marginTop: 8,
-    color: '#666',
-  },
-  fab: {
-    position: 'absolute',
-    margin: 24,
-    right: 0,
-    bottom: 0,
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-  },
+    company: {
+        ...globalStyles.text,
+        marginTop: 5,
+    },
+    details: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    description: {
+        ...globalStyles.text,
+        marginTop: 10,
+    },
+    fab: {
+        ...globalStyles.fab,
+        backgroundColor: globalStyles.primaryColor,
+    },
 });
 
 export default JobsScreen;

@@ -2,23 +2,21 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// 创建API实例
+// Create API instance
 const API = axios.create({
-  // 在Android模拟器中，10.0.2.2指向主机的localhost
-  // 在iOS模拟器中，localhost指向主机的localhost
-  // 在真机上，需要使用实际的服务器地址
+  // In Android emulator, 10.0.2.2 points to the host's localhost
+  // In iOS emulator, localhost points to the host's localhost
+  // On a real device, you need to use the actual server address
   baseURL: Platform.OS === 'android'
     ? 'http://10.0.2.2:8080/api'
-    : Platform.OS === 'ios'
-      ? 'http://172.20.10.2:8080/api'
-      : 'http://192.168.1.100:8080/api', // 请将192.168.1.100替换为你的电脑在局域网中的实际IP地址
+    : 'http://localhost:8080/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// 请求拦截器 - 添加认证令牌
+// Request interceptor - add authentication token
 API.interceptors.request.use(
   async (config) => {
     try {
@@ -37,23 +35,23 @@ API.interceptors.request.use(
   }
 );
 
-// 响应拦截器 - 处理错误
+// Response interceptor - handle errors
 API.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // 处理401未授权错误
+    // Handle 401 Unauthorized error
     if (error.response && error.response.status === 401) {
-      // 清除本地存储的令牌
+      // Clear locally stored token
       AsyncStorage.removeItem('token');
-      // 可以在这里添加重定向到登录页面的逻辑
+      // You can add logic to redirect to the login page here
     }
     return Promise.reject(error);
   }
 );
 
-// 认证相关API
+// Authentication related API
 export const authAPI = {
   login: (credentials) => API.post('/auth/login', credentials),
   register: (userData) => API.post('/auth/register', userData),
@@ -61,14 +59,14 @@ export const authAPI = {
   resetPassword: (email) => API.post('/auth/reset-password', { email }),
 };
 
-// 用户相关API
+// User related API
 export const userAPI = {
   getCurrentUser: () => API.get('/users/me'),
   updateProfile: (userData) => API.put('/users/me', userData),
   getAllUsers: (params) => API.get('/users', { params }),
 };
 
-// 职位相关API
+// Job related API
 export const jobAPI = {
   getAllJobs: (params) => API.get('/jobs', { params }),
   getJobById: (id) => API.get(`/jobs/${id}`),
@@ -78,7 +76,7 @@ export const jobAPI = {
   applyForJob: (jobId, application) => API.post(`/jobs/${jobId}/apply`, application),
 };
 
-// 申请相关API
+// Application related API
 export const applicationAPI = {
   getAllApplications: (params) => API.get('/applications', { params }),
   getApplicationById: (id) => API.get(`/applications/${id}`),
@@ -86,7 +84,7 @@ export const applicationAPI = {
   updateApplicationStatus: (id, status) => API.put(`/applications/${id}/status`, { status }),
 };
 
-// 聊天相关API
+// Chat related API
 export const chatAPI = {
   getConversations: () => API.get('/chats/conversations'),
   getMessages: (conversationId) => API.get(`/chats/conversations/${conversationId}/messages`),
@@ -95,14 +93,14 @@ export const chatAPI = {
   createConversation: (recipientId) => API.post('/chats/conversations', { recipientId }),
 };
 
-// 公司相关API
+// Company related API
 export const companyAPI = {
   getCompanyById: (id) => API.get(`/companies/${id}`),
   updateCompany: (id, companyData) => API.put(`/companies/${id}`, companyData),
   createCompany: (companyData) => API.post('/companies', companyData),
 };
 
-// 简历相关API
+// Resume related API
 export const resumeAPI = {
   getResume: () => API.get('/resumes/me'),
   updateResume: (resumeData) => API.put('/resumes/me', resumeData),

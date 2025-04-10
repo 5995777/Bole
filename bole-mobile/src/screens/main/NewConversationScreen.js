@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Divider, Searchbar } from 'react-native-paper';
+import { Divider, Searchbar } from 'react-native-paper';
+import globalStyles from '../../styles/globalStyles';
 
 // Import actions and API services
 import { createConversation } from '../../store/slices/chatSlice';
@@ -68,13 +69,9 @@ const NewConversationScreen = ({ navigation }) => {
         style={styles.userItem} 
         onPress={() => handleUserPress(item.id)}
       >
-        <Avatar.Text 
-          size={50} 
-          label={item.name.substring(0, 2).toUpperCase()} 
-          backgroundColor="#6200ee"
-        />
+        <View style={globalStyles.avatar}><Text style={globalStyles.avatarText}>{item.name.substring(0, 1).toUpperCase()}</Text></View>
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>{item.name}</Text>
+          <Text style={globalStyles.text}>{item.name}</Text>
           <Text style={styles.userRole}>{item.role}</Text>
         </View>
       </TouchableOpacity>
@@ -82,7 +79,7 @@ const NewConversationScreen = ({ navigation }) => {
   };
   
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <Searchbar
         placeholder="Search users"
         onChangeText={handleSearch}
@@ -90,27 +87,22 @@ const NewConversationScreen = ({ navigation }) => {
         style={styles.searchBar}
       />
       
-      {searchLoading ? (
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color="#6200ee" />
-        </View>
-      ) : searchError ? (
-        <View style={styles.centered}>
-          <Text style={styles.errorText}>Error: {searchError}</Text>
-          <TouchableOpacity 
-            style={styles.retryButton}
-            onPress={() => fetchUsers(searchQuery)}
-          >
-            <Text style={styles.retryText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
-      ) : users.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyStateText}>No users found</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={users}
+        {searchLoading ? (
+            <View style={styles.centered}>
+              <ActivityIndicator size="large" color={globalStyles.primaryColor} />
+            </View>
+        ) : searchError ? (
+            <View style={styles.centered}>
+              <Text style={styles.errorText}>Error: {searchError}</Text>
+              <TouchableOpacity style={globalStyles.button} onPress={() => fetchUsers(searchQuery)}>
+                <Text style={globalStyles.buttonText}>Retry</Text>
+              </TouchableOpacity>
+            </View>
+        ) : users.length === 0 ? (
+            <View style={styles.emptyState}><Text style={styles.emptyStateText}>No users found</Text></View>
+        ) : (
+            <FlatList
+                data={users}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <Divider />}
@@ -123,61 +115,37 @@ const NewConversationScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    ...globalStyles.container,
   },
   searchBar: {
-    margin: 10,
-    elevation: 2,
+    ...globalStyles.input,
+    marginBottom: 20,
   },
   listContent: {
     flexGrow: 1,
+    paddingBottom: 20,
   },
   userItem: {
     flexDirection: 'row',
-    padding: 15,
     alignItems: 'center',
+    paddingVertical: 12,
   },
   userInfo: {
     flex: 1,
-    marginLeft: 15,
-  },
-  userName: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    marginLeft: 12,
   },
   userRole: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 2,
+    ...globalStyles.smallText,
+    marginTop: 4,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
+    emptyState: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
   },
-  retryButton: {
-    backgroundColor: '#6200ee',
-    padding: 10,
-    borderRadius: 5,
-  },
-  retryText: {
-    color: '#fff',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  emptyStateText: {
-    fontSize: 18,
-    color: '#888',
-  },
-});
-
-export default NewConversationScreen;

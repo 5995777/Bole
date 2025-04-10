@@ -110,40 +110,42 @@ const MainNavigator = () => {
         tabBarActiveTintColor: '#6200ee',
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
+        animation: 'slide_from_right',
+        statusBarColor: 'transparent',
       })}
     >
       <Tab.Screen 
         name="Home" 
         component={HomeScreen} 
-        options={{ tabBarLabel: '首页', tabBarIcon: ({ color, size }) => (
+        options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (
           <MaterialIcons name="home" size={size} color={color} />
         ) }} 
       />
       <Tab.Screen 
         name="Jobs" 
         component={JobsNavigator} 
-        options={{ tabBarLabel: '职位', tabBarIcon: ({ color, size }) => (
+        options={{ tabBarLabel: 'Jobs', tabBarIcon: ({ color, size }) => (
           <MaterialIcons name="work" size={size} color={color} />
         ) }} 
       />
       <Tab.Screen 
         name="Applications" 
         component={ApplicationsNavigator} 
-        options={{ tabBarLabel: '申请', tabBarIcon: ({ color, size }) => (
+        options={{ tabBarLabel: 'Applications', tabBarIcon: ({ color, size }) => (
           <MaterialIcons name="description" size={size} color={color} />
         ) }} 
       />
       <Tab.Screen 
         name="Chat" 
         component={ChatNavigator} 
-        options={{ tabBarLabel: '聊天', tabBarIcon: ({ color, size }) => (
+        options={{ tabBarLabel: 'Chat', tabBarIcon: ({ color, size }) => (
           <MaterialIcons name="chat" size={size} color={color} />
         ) }} 
       />
       <Tab.Screen 
         name="Profile" 
         component={ProfileNavigator} 
-        options={{ tabBarLabel: '我的', tabBarIcon: ({ color, size }) => (
+        options={{ tabBarLabel: 'Profile', tabBarIcon: ({ color, size }) => (
           <MaterialIcons name="person" size={size} color={color} />
         ) }} 
       />

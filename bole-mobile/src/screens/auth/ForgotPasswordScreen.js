@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button, Text, HelperText, useTheme } from 'react-native-paper';
 import axios from 'axios';
-
+import globalStyles from '../../styles/globalStyles';
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -68,38 +68,42 @@ const ForgotPasswordScreen = ({ navigation }) => {
             autoCapitalize="none"
             error={!!emailError}
           />
-          {emailError ? <HelperText type="error">{emailError === 'Email is required' ? '请输入邮箱' : '请输入有效的邮箱地址'}</HelperText> : null}
+          {emailError ? <HelperText type="error" style={globalStyles.errorText}>{emailError === 'Email is required' ? '请输入邮箱' : '请输入有效的邮箱地址'}</HelperText> : null}
 
-          {error ? <HelperText type="error">{error}</HelperText> : null}
+          {error ? <HelperText type="error" style={globalStyles.errorText}>{error}</HelperText> : null}
           {message ? <HelperText type="info" style={styles.successMessage}>{message === 'Password reset instructions have been sent to your email.' ? '密码重置说明已发送至您的邮箱。' : message}</HelperText> : null}
 
           <Button
             mode="contained"
             onPress={handleResetPassword}
-            style={styles.button}
+            style={globalStyles.button}
             loading={loading}
             disabled={loading}
           >
             重置密码
           </Button>
 
-          <Button
-            mode="text"
-            onPress={() => navigation.navigate('Login')}
-            style={styles.backButton}
-          >
-            返回登录
-          </Button>
+          <View style={styles.bottomTextContainer}>
+            <Button
+              mode="text"
+              onPress={() => navigation.navigate('Login')}
+              labelStyle={globalStyles.linkText}
+            >
+              返回登录
+            </Button>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: globalStyles.backgroundColor,
+    paddingHorizontal: 20,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -108,30 +112,29 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    ...globalStyles.headerTitle,
+    fontSize: 28,
+    marginBottom: 15,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
+    ...globalStyles.subtitle,
+    fontSize: 18,
+    color: globalStyles.lightTextColor,
     textAlign: 'center',
   },
   formContainer: {
     width: '100%',
   },
   input: {
-    marginBottom: 10,
+    ...globalStyles.input,
+    marginBottom: 15,
   },
-  button: {
+  bottomTextContainer: {
+    alignItems: 'center',
     marginTop: 20,
-    paddingVertical: 8,
-  },
-  backButton: {
-    marginTop: 10,
   },
   successMessage: {
     color: 'green',

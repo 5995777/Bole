@@ -97,7 +97,7 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to fetch jobs';
+        state.error = action.payload?.message || 'Failed to fetch jobs';
       })
       // Fetch Job By Id
       .addCase(fetchJobById.pending, (state) => {
@@ -110,7 +110,7 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to fetch job';
+        state.error = action.payload?.message || 'Failed to fetch job';
       })
       // Create Job
       .addCase(createJob.pending, (state) => {
@@ -123,7 +123,7 @@ const jobsSlice = createSlice({
       })
       .addCase(createJob.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to create job';
+        state.error = action.payload?.message || 'Failed to create job';
       })
       // Update Job
       .addCase(updateJob.pending, (state) => {
@@ -140,7 +140,7 @@ const jobsSlice = createSlice({
       })
       .addCase(updateJob.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to update job';
+        state.error = action.payload?.message || 'Failed to update job';
       })
       // Delete Job
       .addCase(deleteJob.pending, (state) => {
@@ -153,7 +153,7 @@ const jobsSlice = createSlice({
       })
       .addCase(deleteJob.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : 'Failed to delete job';
+        state.error = action.payload?.message || 'Failed to delete job';
       });
   },
 });

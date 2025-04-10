@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Card, Title, Paragraph, Chip, useTheme } from 'react-native-paper';
-
+import globalStyles from '../../styles/globalStyles';
+import { formatDate } from '../../utils/formatDate';
 const ApplicationsScreen = ({ navigation }) => {
   const [applications, setApplications] = useState([]);
   const { user } = useSelector((state) => state.auth);
@@ -78,38 +79,41 @@ const ApplicationsScreen = ({ navigation }) => {
           >
             {getStatusText(item.status)}
           </Chip>
-          <Paragraph style={styles.date}>申请时间：{item.appliedAt}</Paragraph>
+          <Paragraph style={styles.date}>
+            申请时间：{formatDate(item.appliedAt)}
+          </Paragraph>
         </View>
       </Card.Content>
     </Card>
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={applications}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.list}
-      />
-    </View>
+      <View style={globalStyles.container}>
+        <FlatList
+            data={applications}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={styles.list}
+        />
+      </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
+
   list: {
-    padding: 16,
+    padding: 15,
   },
   card: {
-    marginBottom: 16,
+    ...globalStyles.card,
+    marginBottom: 15,
   },
   company: {
-    marginTop: 4,
-    color: '#666',
+    ...globalStyles.text,
+    marginTop: 5,
+  },
+  jobTitle: {
+    ...globalStyles.title,
   },
   details: {
     flexDirection: 'row',
@@ -117,12 +121,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 12,
   },
-  statusChip: {
-    height: 28,
+  chip: {
+    borderRadius: 5,
+    height: 30,
+    paddingHorizontal: 10,
   },
   date: {
-    color: '#666',
-    fontSize: 12,
+    ...globalStyles.smallText,
+    fontSize: 14,
   },
 });
 
